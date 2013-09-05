@@ -9,14 +9,15 @@ function init() {
 
 function draw() {
     requestAnimationFrame( draw );
-    // shape.rotation.y += 0.01;
+    shape.rotation.y += 0.03;
+    shape.rotation.x += 0.01
     renderer.render( scene, camera );
 }
 
 function setUpScene() {
     var x, y, width, height;
     var scene = new THREE.Scene();
-    var shapeMaterial = new THREE.MeshLambertMaterial( { color: 0xFF6666, side: THREE.DoubleSide } );
+    var shapeMaterial = new THREE.MeshPhongMaterial( { color: 0xFF6666, side: THREE.DoubleSide } );
     // shapeMaterial.opacity = 0.5;
 
     width = height = 300;
@@ -67,56 +68,71 @@ function setUpScene() {
 
     shapeStructure.holes.push( cHole );
 
-    // var hHole = new THREE.Path();
-
-
-
-    // shapeStructure.holes.push( hHole );
+    var hHole = new THREE.Path();
+    hHole.moveTo( 236.484, height - 183.861 );
+    hHole.lineTo( 236.445, height - 161.879 );
+    hHole.bezierCurveTo( 236.4, height - 154.475, 234.238, height - 150.188, 231.812, height - 147.399 );
+    hHole.bezierCurveTo( 227.531, height - 141.562, 220.623, height - 137.773, 212.824, height - 137.773 );
+    hHole.bezierCurveTo( 208.918, height - 137.773, 205.236, height - 138.724, 201.994, height - 140.408 );
+    hHole.lineTo( 201.994, height - 111.823 );
+    hHole.lineTo( 189.232, height - 111.823 );
+    hHole.lineTo( 189.232, height - 183.878 );
+    hHole.lineTo( 201.994, height - 196.605 );
+    hHole.lineTo( 201.994, height - 160.211 );
+    hHole.bezierCurveTo( 202.596, height - 154.746, 207.213, height - 150.475, 212.824, height - 150.475 );
+    hHole.bezierCurveTo( 218.806, height - 150.475, 223.749, height - 155.328, 223.749, height - 161.310 );
+    hHole.lineTo( 223.734, height - 183.863 );
+    shapeStructure.holes.push( hHole );
 
     shape = new THREE.Mesh(
         new THREE.ShapeGeometry( shapeStructure ),
         shapeMaterial
     );
 
-    shape.position.y = -150;
-    shape.position.x = -150;
-    shape.position.z = -100;
-    // shape.rotation.y = -0.3;
+    shape.scale.set(0.75, 0.75, 0.75);
+    shape.position.y = -50;
+    shape.position.x = -100;
+    shape.position.z = 200;
+    shape.rotation.y = -0.3;
+    shape.castShadow = true;
 
     scene.add( shape );
 
     pointLight = new THREE.PointLight( 0xFFFFFF );
 
     // set its position
-    pointLight.position.x = 0;
-    pointLight.position.y = 0;
-    pointLight.position.z = 500;
+    pointLight.position.x = 10;
+    pointLight.position.y = 50;
+    pointLight.position.z = 800;
 
     // add to the scene
     scene.add( pointLight );
 
-    // spotLight = new THREE.SpotLight( 0xFFFFFF );
+    spotLight = new THREE.SpotLight( 0xFFFFFF );
 
     // // set its position
-    // spotLight.position.x = 400;
-    // spotLight.position.y = 400;
-    // spotLight.position.z = 1000;
+    spotLight.position.x = -200;
+    spotLight.position.y = 0;
+    spotLight.position.z = 300;
+    spotLight.castShadow = true;
 
     // // add to the scene
-    // scene.add( spotLight );
+    scene.add( spotLight );
 
     return scene;
 }
 
 function setUpCamera() {
     var camera = new THREE.PerspectiveCamera( 40, window.innerWidth / window.innerHeight, 1, 2000 );
-    camera.position.set( 0, 0, 500 );
+    camera.position.set( 0, 0, 700 );
     return camera;
 }
 
 function setUpRenderer() {
     var renderer = new THREE.WebGLRenderer( { antialias: true } );
     renderer.setSize( window.innerWidth, window.innerHeight );
+    renderer.shadowMapEnabled = true;
+    renderer.shadowMapSoft = true;
     document.body.appendChild( renderer.domElement );
     return renderer;
 }
